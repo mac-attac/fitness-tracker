@@ -1,1 +1,62 @@
 //create api routes here
+const db = require("../models");
+
+module.exports = (app) => {
+  //retrieve all workouts
+  app.get("/api/workouts", (req, res) => {
+    db.Workout.find({}, (err, workouts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(workouts);
+      }
+    });
+  });
+  //create new workout
+  app.post("/api/workouts", (req, res) => {
+    db.Workout.create({}, (err, workouts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(workouts);
+      }
+    });
+  });
+
+  //retrieve workouts in range
+  app.get("/api/workouts/range", (req, res) => {
+    db.Workout.find({}, (err, workouts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(workouts);
+      }
+    });
+  });
+
+  //create new workout
+  app.post("/api/workouts/range", (req, res) => {
+    db.Workout.create({}, (err, workouts) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.json(workouts);
+      }
+    });
+  });
+
+  //add an exercise to a workout
+  app.put("/api/workouts/:workout", ({ body, params }, res) => {
+    db.Workout.findByIdAndUpdate(
+      { _id: params.workout },
+      { $push: { exercises: body } },
+      { new: true, useFindAndModify: false }
+    )
+      .then((Workout) => {
+        res.json(Workout);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+};
